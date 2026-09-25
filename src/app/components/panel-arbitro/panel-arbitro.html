@@ -1,0 +1,245 @@
+<div class="arbitro-wrapper">
+  <div class="arbitro-container">
+
+    <div *ngIf="!partidoSeleccionado">
+      <div class="header-arbitro text-center mb-4">
+        <h2>Mesa de Árbitros ⏱️</h2>
+        <p>Centro de control y actas en directo</p>
+      </div>
+
+      <div class="partidos-grid" *ngIf="partidos$ | async as partidos">
+        <div class="alerta-danger" *ngIf="hayPartidoEnCurso()">
+          ⚠️ Hay un partido en juego. Finalízalo antes de iniciar otro.
+        </div>
+
+        <div class="partido-card-mini" 
+         *ngFor="let partido of partidosOrdenados" 
+         [class.destacado]="esDestacado(partido)"
+         [class.atrasado]="esPartidoAtrasado(partido)">
+          
+          <div class="header-tarjeta">
+            <span class="fase">{{ partido.fase }}</span>
+            <div class="badges-group">
+              <span class="estado-badge pendiente" *ngIf="partido.estado === 'pendiente' || partido.estado === 'activo'">Pendiente</span>
+              <span class="estado-badge jugandose" *ngIf="partido.estado === 'en_curso'">Jugándose</span>
+              <span class="estado-badge revision" *ngIf="partido.estado === 'revision'">En Revisión</span>
+              <span class="estado-badge cerrado" *ngIf="partido.estado === 'finalizado'">Cerrado</span>
+              <span *ngIf="esPartidoAtrasado(partido)" class="alerta-texto">⚠️ Atrasado</span>
+            </div>
+          </div>
+
+          <h3>{{ partido.equipoLocal.nombre }} <span>VS</span> {{ partido.equipoVisitante.nombre }}</h3>
+          <p class="hora-partido">🕒 {{ partido.horaInicio | date:'dd/MM HH:mm' }}</p>
+
+          <button class="btn-entrar" (click)="entrarAlPartido(partido)">
+            {{ partido.estado === 'finalizado' ? 'Ver Acta Cerrada' : 'Entrar al Acta' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="partidoSeleccionado" class="partido-detalle">
+      <button class="btn-volver" (click)="volverALaLista()">⬅ Volver a la lista</button>
+      
+      <div class="header-partido">
+        <h2>{{ partidoSeleccionado.equipoLocal.nombre }} <span>VS</span> {{ partidoSeleccionado.equipoVisitante.nombre }}</h2>
+        <button *ngIf="partidoSeleccionado.estado === 'finalizado' && esAdmin && !modoEdicionAdmin" class="btn-editar-admin" (click)="habilitarEdicionAdmin()">✏️ Modo Admin</button>
+      </div>
+
+      <div class="tabs-menu">
+        <button [class.activa]="pestanaActiva === 'pre'" [disabled]="partidoSeleccionado.estado === 'revision' || partidoSeleccionado.estado === 'finalizado'" (click)="pestanaActiva = 'pre'">📋 Pre-Partido</button>
+        <button [class.activa]="pestanaActiva === 'directo'" [disabled]="partidoSeleccionado.estado === 'pendiente' || partidoSeleccionado.estado === 'activo' || partidoSeleccionado.estado === 'revision' || partidoSeleccionado.estado === 'finalizado'" (click)="pestanaActiva = 'directo'">⚽ Directo</button>
+        <button [class.activa]="pestanaActiva === 'post'" [disabled]="partidoSeleccionado.estado === 'pendiente' || partidoSeleccionado.estado === 'activo' || partidoSeleccionado.estado === 'en_curso'" (click)="pestanaActiva = 'post'">📝 Post-Partido</button>
+      </div>
+
+      <div class="tab-content" *ngIf="pestanaActiva === 'pre'">
+        <!--
+        <div class="alerta-info mb-3">Pasa lista de los presentes e introduce el dorsal que usarán hoy.</div>
+        -->
+        <div class="listas-container">
+          <div class="lista-equipo" *ngFor="let eq of equiposAIterar">
+            <h5 class="equipo-titulo">{{ eq === 'local' ? partidoSeleccionado.equipoLocal.nombre : partidoSeleccionado.equipoVisitante.nombre }}</h5>
+            
+            <div class="jugador-row glass-row" *ngFor="let jugador of (eq === 'local' ? partidoSeleccionado.plantillaLocal : partidoSeleccionado.plantillaVisitante)">
+              
+              <label class="checkbox-container" [ngClass]="{'sancionado-ui': jugador.sancionado}">
+                <input type="checkbox" 
+                       [disabled]="jugador.sancionado"
+                       [checked]="estaPresente(eq, jugador.id)" 
+                       (change)="toggleAsistencia(eq, jugador.id)">
+                <span class="checkmark" *ngIf="!jugador.sancionado"></span>
+                
+                <div class="info-jugador">
+                  <span class="nombre" [ngStyle]="{'text-decoration': jugador.sancionado ? 'line-through' : 'none'}">
+                    {{ jugador.nombre }}
+                  </span>
+                  <span *ngIf="jugador.sancionado" style="color: #ff5252; font-size: 0.8rem; margin-left: 5px;">(Sancionado 🟥)</span>
+                </div>
+              </label>
+              
+              <input type="number" 
+                min="0" max="99" 
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                placeholder="Nº" 
+                class="input-dorsal"
+                [disabled]="!estaPresente(eq, jugador.id)"
+                [value]="partidoSeleccionado.acta[eq === 'local' ? 'dorsalesLocal' : 'dorsalesVisitante'][jugador.id] || jugador.dorsal || ''"
+                (blur)="actualizarDorsal(eq, jugador.id, $event)">
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-accion mt-3" *ngIf="partidoSeleccionado.estado === 'pendiente'">
+          <!--
+          <div *ngIf="(partidoSeleccionado.acta.presentesLocal.length || 0) < 4 || (partidoSeleccionado.acta.presentesVisitante.length || 0) < 4" class="alerta-danger mb-2">
+            ⚠️ Norma 4: Ambos equipos deben tener un mínimo de 4 jugadores para iniciar.
+          </div>
+          -->
+          <button class="btn-gigante verde" 
+            [disabled]="hayPartidoEnCurso()"
+            (click)="irAlDirecto()">
+            {{ hayPartidoEnCurso() ? '🚫 Otro partido en curso' : '▶️ Iniciar Partido' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="pestanaActiva === 'directo'">
+        <div class="controles-tiempo">
+          <span class="estado-actual">{{ partidoSeleccionado.periodo }}</span>
+          <div class="botones-tiempo">
+            <button (click)="cambiarPeriodo('1ª Parte')" [disabled]="partidoSeleccionado.periodo === '1ª Parte'">1ª Parte</button>
+            <button (click)="cambiarPeriodo('Descanso')" [disabled]="partidoSeleccionado.periodo === 'Descanso'">Descanso</button>
+            <button (click)="cambiarPeriodo('2ª Parte')" [disabled]="partidoSeleccionado.periodo === '2ª Parte'">2ª Parte</button>
+          </div>
+        </div>
+
+        <div class="controles-marcador">
+          <div class="equipo-control glass-panel">
+            <h3>{{ partidoSeleccionado.equipoLocal.nombre }}</h3>
+            <span class="marcador-actual goles">{{ partidoSeleccionado.marcador.local }}</span>
+            <button class="btn-gol" (click)="modificarGol('local', 1)">+1 Gol Local</button>
+          </div>
+          <div class="equipo-control glass-panel">
+            <h3>{{ partidoSeleccionado.equipoVisitante.nombre }}</h3>
+            <span class="marcador-actual goles">{{ partidoSeleccionado.marcador.visitante }}</span>
+            <button class="btn-gol visitante" (click)="modificarGol('visitante', 1)">+1 Gol Visitante</button>
+          </div>
+        </div>
+        <!--
+        <div class="alerta-danger mt-3" *ngIf="
+          ((partidoSeleccionado.acta.presentesLocal.length || 0) - (partidoSeleccionado.acta.rojasLocal.length || 0) <= 3) ||
+          ((partidoSeleccionado.acta.presentesVisitante.length || 0) - (partidoSeleccionado.acta.rojasVisitante.length || 0) <= 3)">
+          🛑 ALERTA REGLAMENTO: Un equipo se ha quedado con 3 o menos jugadores en pista. El partido debe darse por finalizado.
+        </div>
+        -->
+        <div class="listas-container mt-3">
+          <div class="lista-equipo">
+            <h5 class="equipo-titulo">Plantilla Activa Local</h5>
+            <ng-container *ngFor="let jugador of partidoSeleccionado.plantillaLocal">
+              <div class="jugador-row-directo glass-row" *ngIf="estaPresente('local', jugador.id)" [ngClass]="{'jugador-expulsado': tieneRoja('local', jugador.id)}">
+                <div class="jugador-info">
+                  <span class="dorsal-badge">{{ partidoSeleccionado.acta.dorsalesLocal[jugador.id] || jugador.dorsal || '-' }}</span>
+                  <span class="nombre">{{ jugador.nombre }}</span>
+                </div>
+                <button class="btn-roja" [ngClass]="{'activa': tieneRoja('local', jugador.id)}" (click)="toggleRoja('local', jugador.id)">🟥</button>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="lista-equipo">
+            <h5 class="equipo-titulo">Plantilla Activa Visitante</h5>
+            <ng-container *ngFor="let jugador of partidoSeleccionado.plantillaVisitante">
+              <div class="jugador-row-directo glass-row" *ngIf="estaPresente('visitante', jugador.id)" [ngClass]="{'jugador-expulsado': tieneRoja('visitante', jugador.id)}">
+                <div class="jugador-info">
+                  <span class="dorsal-badge visitante">{{ partidoSeleccionado.acta.dorsalesVisitante[jugador.id] || jugador.dorsal || '-' }}</span>
+                  <span class="nombre">{{ jugador.nombre }}</span>
+                </div>
+                <button class="btn-roja" [ngClass]="{'activa': tieneRoja('visitante', jugador.id)}" (click)="toggleRoja('visitante', jugador.id)">🟥</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="footer-accion mt-4" *ngIf="partidoSeleccionado.estado === 'en_curso'">
+          <button class="btn-gigante rojo" (click)="finalizarDirecto()">⏹️ Terminar Partido</button>
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="pestanaActiva === 'post'">
+        <div class="alerta-info bg-warning mb-3" *ngIf="partidoSeleccionado.estado === 'revision'">Revisa el acta. Puedes corregir el marcador o las sanciones antes de cerrar definitivamente.</div>
+        <div class="alerta-info bg-danger text-white mb-3" *ngIf="partidoSeleccionado.estado === 'finalizado' && modoEdicionAdmin">ATENCIÓN: Estás modificando un acta cerrada (Modo Admin).</div>
+
+        <div class="resumen-marcador glass-panel">
+          <div class="corrector">
+            <button (click)="modificarGol('local', -1)" [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin">-</button>
+            <span class="goles">{{ partidoSeleccionado.marcador.local }}</span>
+            <button (click)="modificarGol('local', 1)" [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin">+</button>
+          </div>
+          <div class="separador">VS</div>
+          <div class="corrector">
+            <button (click)="modificarGol('visitante', -1)" [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin">-</button>
+            <span class="goles">{{ partidoSeleccionado.marcador.visitante }}</span>
+            <button (click)="modificarGol('visitante', 1)" [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin">+</button>
+          </div>
+        </div>
+        <!-- NUEVO: RESOLUCIÓN DE EMPATES (PENALTIS) -->
+        <div class="alerta-danger text-center mt-3" *ngIf="partidoSeleccionado.marcador.local === partidoSeleccionado.marcador.visitante" style="padding: 1.5rem; background: rgba(198, 40, 40, 0.2); border: 1px solid #c62828; border-radius: 8px;">
+          <h4 style="color: #ff8a80; margin-top: 0; font-weight: bold;">⚠️ PARTIDO EMPATADO</h4>
+          <p style="margin-bottom: 1rem;">No puede haber empates. Selecciona quién ha ganado la tanda de penaltis:</p>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-anadir" 
+                    [ngStyle]="{'background': partidoSeleccionado.ganadorPenaltis === 'local' ? '#d4af37' : 'rgba(255,255,255,0.1)', 'color': partidoSeleccionado.ganadorPenaltis === 'local' ? '#000' : '#fff'}" 
+                    (click)="setGanadorPenaltis('local')">
+              Ganó {{ partidoSeleccionado.equipoLocal.nombre }}
+            </button>
+            <button class="btn-anadir" 
+                    [ngStyle]="{'background': partidoSeleccionado.ganadorPenaltis === 'visitante' ? '#d4af37' : 'rgba(255,255,255,0.1)', 'color': partidoSeleccionado.ganadorPenaltis === 'visitante' ? '#000' : '#fff'}"
+                    (click)="setGanadorPenaltis('visitante')">
+              Ganó {{ partidoSeleccionado.equipoVisitante.nombre }}
+            </button>
+          </div>
+        </div>
+
+        <div class="listas-container mt-3">
+          <div class="lista-equipo">
+            <h5 class="equipo-titulo">Revisión Local</h5>
+            <ng-container *ngFor="let jugador of partidoSeleccionado.plantillaLocal">
+              <div class="jugador-row-directo glass-row" *ngIf="estaPresente('local', jugador.id)" [ngClass]="{'jugador-expulsado': tieneRoja('local', jugador.id)}">
+                <span class="nombre">{{ jugador.nombre }} <span class="dorsal-min">({{ partidoSeleccionado.acta.dorsalesLocal[jugador.id] || jugador.dorsal || '-' }})</span></span>
+                <button class="btn-roja" 
+                        [ngClass]="{'activa': tieneRoja('local', jugador.id)}" 
+                        [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin"
+                        (click)="toggleRoja('local', jugador.id)">🟥</button>
+              </div>
+            </ng-container>
+          </div>
+
+          <div class="lista-equipo">
+            <h5 class="equipo-titulo">Revisión Visitante</h5>
+            <ng-container *ngFor="let jugador of partidoSeleccionado.plantillaVisitante">
+              <div class="jugador-row-directo glass-row" *ngIf="estaPresente('visitante', jugador.id)" [ngClass]="{'jugador-expulsado': tieneRoja('visitante', jugador.id)}">
+                <span class="nombre">{{ jugador.nombre }} <span class="dorsal-min">({{ partidoSeleccionado.acta.dorsalesVisitante[jugador.id] || jugador.dorsal || '-' }})</span></span>
+                <button class="btn-roja" 
+                        [ngClass]="{'activa': tieneRoja('visitante', jugador.id)}" 
+                        [disabled]="partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin"
+                        (click)="toggleRoja('visitante', jugador.id)">🟥</button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="footer-accion mt-4">
+          <button class="btn-gigante oscuro" 
+            (click)="cerrarActaDefinitiva()" 
+            [disabled]="(partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin) || 
+                        (partidoSeleccionado.marcador.local === partidoSeleccionado.marcador.visitante && !partidoSeleccionado.ganadorPenaltis)">
+            {{ partidoSeleccionado.estado === 'finalizado' && !modoEdicionAdmin 
+            ? '🔒 ACTA CERRADA DEFINITIVAMENTE' 
+            : (modoEdicionAdmin ? '💾 GUARDAR CAMBIOS' : '🔒 FINALIZAR ENCUENTRO Y CERRAR ACTA') }}
+        </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

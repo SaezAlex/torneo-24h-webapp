@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/torneo" class="logo-link">
+      <!-- Imagen del logo -->
+      <img src="assets/logo24h.png" alt="Logo 24H Castro Urdiales" class="logo-img">
+      
+      <!-- Título a la derecha -->
+      <div class="logo-titulo">
+        <div class="linea-superior">
+          <span class="destacado-24">24</span>
+          <span class="texto-horas">Horas</span>
+        </div>
+        <span class="texto-castro">Castro Urdiales</span>
+      </div>
+    </a>
+  </div>
+  
+  <div class="enlaces">
+    <a routerLink="/noticias" routerLinkActive="activo">📰 Noticias</a>
+    <a routerLink="/torneo" routerLinkActive="activo">⚽ Directo</a>
+    <a routerLink="/colaboradores" routerLinkActive="activo">🤝 Colaboradores</a>
+
+    <a *ngIf="rol === 'admin'" routerLink="/admin" routerLinkActive="activo">⚙️ Admin</a>
+    <a *ngIf="rol === 'admin' || rol === 'arbitro'" routerLink="/arbitro" routerLinkActive="activo">⏱️ Árbitros</a>
+
+    <a *ngIf="!usuarioLogueado" routerLink="/login" class="btn-login">Entrar</a>
+    <button *ngIf="usuarioLogueado" (click)="logout()" class="btn-logout">Salir</button>
+  </div>
+</nav>

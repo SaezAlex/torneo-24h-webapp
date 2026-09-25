@@ -1,0 +1,62 @@
+<div class="info-noticias-container">
+  
+  <div class="submenu-scroll">
+    <button [class.activo]="pestanaSubmenu === 'noticias'" (click)="pestanaSubmenu = 'noticias'">
+      📰 Noticias
+    </button>
+    <button [class.activo]="pestanaSubmenu === 'reglamento'" (click)="pestanaSubmenu = 'reglamento'">
+      📜 Reglamento Oficial
+    </button>
+  </div>
+
+  <!-- SECCIÓN DE NOTICIAS -->
+  <div *ngIf="pestanaSubmenu === 'noticias'" class="noticias-seccion">
+    
+    <ng-container *ngIf="noticias$ | async as noticiasFirebase">
+      
+      <article *ngFor="let noticia of noticiasFirebase" class="noticia-card" [class.destacada]="noticia.destacada">
+        <span class="fecha">{{ noticia.fecha }}</span>
+        <h3>{{ noticia.titulo }}</h3>
+        <p *ngIf="noticia.resumen" style="white-space: pre-line;">{{ noticia.resumen }}</p>
+      </article>
+
+      <div *ngIf="noticiasFirebase.length === 0" class="mensaje-vacio">
+        No hay noticias publicadas en este momento.
+      </div>
+      
+    </ng-container>
+    
+  </div>
+
+  <!-- SECCIÓN DE REGLAMENTO -->
+  <div *ngIf="pestanaSubmenu === 'reglamento'" class="reglamento-seccion">
+    <h2>📜 Normativa del Torneo</h2>
+    
+    <div class="pdf-card">
+      <div class="icono-documento">📄</div>
+      <h3>Reglamento Oficial 24 Horas</h3>
+      <p>Consulta o descarga el documento con todas las normativas, tiempos de juego y sanciones aplicables para esta edición del torneo.</p>
+      
+      <!-- Asegúrate de poner tu archivo PDF en la carpeta public o assets -->
+      <a href="assets/reglamento.pdf" target="_blank" class="btn-pdf">
+        VER / DESCARGAR PDF
+      </a>
+    </div>
+  </div>
+
+ 
+   <!-- ========================================== -->
+    <!-- CRÉDITOS DEL DESARROLLADOR                 -->
+    <!-- ========================================== -->
+    <div class="creditos-desarrollador">
+      <p>Desarrollado  por <strong class="mi-nombre">Alex Saez</strong></p>
+      
+      <div class="enlaces-portfolio">
+        <a href="https://saezalex.github.io/portfolio/" target="_blank">Portfolio</a>
+        <span class="separador-enlaces">|</span>
+        <a href="https://www.instagram.com/alexxsaaezz/" target="_blank">Instagram</a>
+      </div>
+      
+      <small>Software de Gestión Deportiva © 2026</small>
+    </div>
+</div>

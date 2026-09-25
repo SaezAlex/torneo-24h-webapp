@@ -1,0 +1,17 @@
+<div class="home-container">
+  
+  <div class="next-match">
+    <h2>Próximo Partido</h2>
+    </div>
+
+  <nav class="nav-tabs">
+    <button routerLink="/tabla">Tabla Eliminatorias</button>
+    <button routerLink="/favoritos">Tu Equipo Favorito</button>
+  </nav>
+
+  @if (esAdmin) {
+    <div class="admin-panel">
+      <button routerLink="/admin" class="btn-admin">Panel de Organización</button>
+    </div>
+  }
+</div>

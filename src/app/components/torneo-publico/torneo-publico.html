@@ -1,0 +1,153 @@
+<div class="public-container">
+  
+  <header class="header-torneo">
+    <h2>Torneo 24 Horas</h2>
+    <p>Castro Urdiales - Marcador Oficial</p>
+  </header>
+ <!--
+  <div class="main-tabs">
+    <button [class.activa]="pestanaActiva === 'partidos'" (click)="pestanaActiva = 'partidos'">
+      ⚽ Partidos
+    </button>
+   
+    <button [class.activa]="pestanaActiva === 'repesca'" (click)="pestanaActiva = 'repesca'">
+      ♻️ Repesca
+    </button>
+    
+  </div>
+  -->
+  <div *ngIf="partidos$ | async as partidosAgrupados">
+    
+    <div *ngIf="pestanaActiva === 'partidos'">
+      
+      <div class="fases-scroll">
+        <button 
+          *ngFor="let fase of fasesDisponibles" 
+          [class.activo]="faseSeleccionada === fase"
+          (click)="setFase(fase)">
+          🏆 {{ fase | uppercase }}
+        </button>
+      </div>
+
+      <div class="partidos-grid" *ngIf="partidosAgrupados[faseSeleccionada] as partidosDeFase">
+        
+        <div class="partido-card" *ngFor="let partido of partidosDeFase" 
+             [ngClass]="{'destacado': partido.id === partidoDestacadoId}">
+          
+          <div class="etiqueta-destacado directo" *ngIf="partido.id === partidoDestacadoId && partido.estado === 'en_curso'">
+            🔥 PARTIDO PRINCIPAL EN DIRECTO
+          </div>
+          <div class="etiqueta-destacado proximo" *ngIf="partido.id === partidoDestacadoId && partido.estado === 'pendiente'">
+            🔜 PRÓXIMO ENCUENTRO
+          </div>
+          
+          <div class="hora-badge" *ngIf="partido.horaInicio">
+            🕒 {{ partido.horaInicio | date:'EEEE HH:mm' }}
+          </div>
+          
+          <div class="estado-bar">
+            <span class="pulsating-dot" *ngIf="partido.estado === 'en_curso'"></span>
+            <span [ngClass]="{'texto-directo': partido.estado === 'en_curso'}">
+              {{ 
+                partido.estado === 'en_curso' ? (partido.periodo || 'EN JUEGO') : 
+                (partido.estado === 'finalizado' ? 'FINALIZADO' : 
+                (partido.estado === 'revision' ? 'EN REVISIÓN' : 'PENDIENTE')) 
+              }}
+            </span>
+          </div>
+
+          <div class="equipos-container" [ngClass]="{'partido-finalizado': partido.estado === 'finalizado'}">
+  
+            <div class="equipo" [ngClass]="{'ganador': haGanado(partido, 'local')}">
+              <span class="nombre">
+                <span class="corona" *ngIf="haGanado(partido, 'local')">👑 </span>
+                {{ partido.equipoLocal.nombre }}
+              </span>
+            </div>
+            
+            <div class="marcador-box" [ngClass]="{'en-juego': partido.estado === 'en_curso'}">
+              <span class="goles" [ngClass]="{'goles-ganador': haGanado(partido, 'local')}">
+                {{ partido.marcador?.local || 0 }}
+              </span>
+              <span class="separador">-</span>
+              <span class="goles" [ngClass]="{'goles-ganador': haGanado(partido, 'visitante')}">
+                {{ partido.marcador?.visitante || 0 }}
+              </span>
+            </div>
+          
+            <div class="equipo" [ngClass]="{'ganador': haGanado(partido, 'visitante')}">
+              <span class="nombre">
+                {{ partido.equipoVisitante.nombre }}
+                <span class="corona" *ngIf="haGanado(partido, 'visitante')"> 👑</span>
+              </span>
+            </div>
+        </div>
+
+          <div class="badge-penaltis mt-3" *ngIf="partido.estado === 'finalizado' && partido.ganadorPenaltis">
+            🎯 Decidido en Penaltis (Ganó {{ partido.ganadorPenaltis === 'local' ? partido.equipoLocal.nombre : partido.equipoVisitante.nombre }})
+          </div>
+        </div>
+
+        <div class="no-partidos" *ngIf="partidosDeFase.length === 0">
+          <p>No hay partidos programados para esta fase aún.</p>
+        </div>
+      </div>
+    </div>
+<!--
+    <div class="repesca-container" *ngIf="pestanaActiva === 'repesca'">
+      <div class="info-repesca">
+        <p>Los 10 mejores perdedores de la 1ª Ronda jugarán las eliminatorias de Repesca.</p>
+        <small>El 11º clasificado quedará eliminado.</small>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table class="tabla-clasificacion">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th class="td-equipo">Equipo</th>
+              <th title="Goles en Contra">GC</th>
+              <th title="Goles a Favor">GF</th>
+              <th title="Diferencia">DIF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="tablaRepesca.length === 0">
+              <td colspan="5" class="sin-datos">Aún no hay partidos finalizados.</td>
+            </tr>
+            
+            <tr *ngFor="let eq of tablaRepesca; let i = index" 
+                [ngClass]="{'clasificado': i < 10, 'eliminado': i >= 10}">
+              <td class="posicion">
+                <span *ngIf="i < 10" class="icono-check">✔️</span>
+                <span *ngIf="i >= 10">❌</span>
+              </td>
+              <td class="td-equipo">{{ eq.nombre }}</td>
+              <td class="goles-destacado">{{ eq.golesEnContra }}</td>
+              <td>{{ eq.golesAFavor }}</td>
+              <td [ngClass]="{'positivo': eq.diferencia > 0, 'negativo': eq.diferencia < 0}">
+                {{ eq.diferencia > 0 ? '+' + eq.diferencia : eq.diferencia }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    -->
+  </div>
+
+  <!-- ========================================== -->
+    <!-- CRÉDITOS DEL DESARROLLADOR                 -->
+    <!-- ========================================== -->
+    <div class="creditos-desarrollador">
+      <p>Desarrollado  por <strong class="mi-nombre">Alex Saez</strong></p>
+      
+      <div class="enlaces-portfolio">
+        <a href="https://saezalex.github.io/portfolio/" target="_blank">Portfolio</a>
+        <span class="separador-enlaces">|</span>
+        <a href="https://www.instagram.com/alexxsaaezz/" target="_blank">Instagram</a>
+      </div>
+      
+      <small>Software de Gestión Deportiva © 2026</small>
+    </div>
+</div>

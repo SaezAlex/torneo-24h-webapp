@@ -1,0 +1,46 @@
+<div class="colaboradores-container">
+  <div class="header-seccion">
+    <h2>🤝 Colaboradores y Patrocinadores</h2>
+    <p>Agradecimiento especial a las entidades y comercios locales que hacen posible traer de vuelta el Torneo 24 Horas.</p>
+  </div>
+
+  <h3 class="tier-title">ORGANIZA</h3>
+  <div class="logos-grid">
+    <div class="logo-card" *ngFor="let org of organizadores">
+      <img *ngIf="!org.error" 
+          [src]="org.logo" 
+          [alt]="org.nombre" 
+          (error)="org.error = true">
+      <span *ngIf="org.error">{{ org.nombre }}</span>
+    </div>
+  </div>
+
+  <h3 class="tier-title mt-4">COLABORAN</h3>
+  <div class="logos-grid pequeños">
+    <div class="logo-card" *ngFor="let colab of colaboradores">
+      <!-- Si NO hay error, intentamos cargar la imagen -->
+      <img *ngIf="!colab.error" 
+          [src]="colab.logo" 
+          [alt]="colab.nombre" 
+          (error)="colab.error = true">
+      
+      <!-- Si HAY error, mostramos el span con el nombre adaptado al nuevo estilo -->
+      <span *ngIf="colab.error">{{ colab.nombre }}</span>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+    <!-- CRÉDITOS DEL DESARROLLADOR                 -->
+    <!-- ========================================== -->
+    <div class="creditos-desarrollador">
+      <p>Desarrollado  por <strong class="mi-nombre">Alex Saez</strong></p>
+      
+      <div class="enlaces-portfolio">
+        <a href="https://saezalex.github.io/portfolio/" target="_blank">Portfolio</a>
+        <span class="separador-enlaces">|</span>
+        <a href="https://www.instagram.com/alexxsaaezz/" target="_blank">Instagram</a>
+      </div>
+      
+      <small>Software de Gestión Deportiva © 2026</small>
+    </div>
+</div>

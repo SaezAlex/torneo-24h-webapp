@@ -1,0 +1,256 @@
+<div class="admin-container">
+  
+  <div class="header-admin">
+    <h2>Panel de Organización 👑</h2>
+    <p>Centro de mando del Torneo 24 Horas</p>
+  </div>
+
+  <div class="tabs-menu">
+    <button [class.activa]="pestanaActiva === 'equipos'" (click)="pestanaActiva = 'equipos'; volverAEquipos()">🛡️ Gestión de Equipos</button>
+    <button [class.activa]="pestanaActiva === 'eliminatorias'" (click)="pestanaActiva = 'eliminatorias'; volverAEquipos()">🏆 Eliminatorias y Partidos</button>
+    <button [class.activa]="pestanaActiva === 'carga'" (click)="pestanaActiva = 'carga'; volverAEquipos()">📁 Cargar CSV</button>
+    <button [class.activa]="pestanaActiva === 'noticias'" (click)="pestanaActiva = 'noticias'">📰 Portal Noticias</button>
+  </div>
+
+  <div class="tab-content" *ngIf="pestanaActiva === 'carga'">
+    <h3>Importación Masiva de Equipos</h3>
+    <p>Sube el archivo CSV con las columnas: Nombre Equipo, Delegado, Nombre Jugador, Dorsal, DNI.</p>
+    <div class="upload-box">
+      <input type="file" accept=".csv" (change)="subirCSV($event)" class="file-input">
+    </div>
+  </div>
+
+  <div class="tab-content" *ngIf="pestanaActiva === 'noticias'">
+  <div class="header-admin">
+    <h3>Redacción de Noticias</h3>
+    <p>Crea avisos, crónicas o comunicados para el portal público.</p>
+  </div>
+
+  <div class="equipo-detalle mb-4">
+    <h4>Crear Nueva Noticia</h4>
+    <div class="form-group mt-2">
+      <label>Título (Obligatorio)</label>
+      <input type="text" [(ngModel)]="nuevaNoticia.titulo" placeholder="Ej: Publicados los cruces de Octavos" class="input-dorsal w-100 mb-2">
+    </div>
+    
+    <div class="form-group">
+      <label>Cuerpo / Descripción</label>
+      <textarea [(ngModel)]="nuevaNoticia.resumen" placeholder="Escribe aquí los detalles..." rows="3" class="input-dorsal w-100 mb-2" style="resize: vertical;"></textarea>
+    </div>
+
+    <label class="checkbox-container mt-2 mb-3">
+      <input type="checkbox" [(ngModel)]="nuevaNoticia.destacada">
+      <span>Marcar como Noticia Destacada (Aparecerá en grande)</span>
+    </label>
+
+    <button class="btn-gigante verde" (click)="crearNoticia()">📢 PUBLICAR NOTICIA</button>
+  </div>
+
+  <h3 class="mt-4">Noticias Publicadas</h3>
+  <div class="partidos-list" *ngIf="noticias$ | async as noticias">
+    <div class="partido-row" *ngFor="let noticia of noticias">
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <strong>{{ noticia.titulo }} <span *ngIf="noticia.destacada" style="color: #FF9800;">(⭐ Destacada)</span></strong>
+        <span style="font-size: 0.8rem; color: #aaa;">{{ noticia.fecha }}</span>
+      </div>
+      
+      <div class="acciones">
+        <button class="btn-icono blue" (click)="editarNoticia(noticia)">✏️</button>
+        <button class="btn-icono red" (click)="eliminarNoticia(noticia.id)">❌</button>
+      </div>
+    </div>
+    <div *ngIf="noticias.length === 0" style="color: #aaa; text-align: center; padding: 1rem;">No hay noticias publicadas.</div>
+  </div>
+</div>
+
+
+  <div class="tab-content" *ngIf="pestanaActiva === 'equipos'">
+    
+    <div *ngIf="!equipoSeleccionado">
+      <div class="acciones-superiores">
+        <h3>Equipos Inscritos</h3>
+        <button class="btn-anadir" (click)="anadirEquipoManual()">+ Añadir Equipo Manual</button>
+      </div>
+      <div class="equipos-grid" *ngIf="equipos$ | async as equipos">
+        <div class="equipo-card" *ngFor="let equipo of equipos" (click)="verEquipo(equipo)">
+          <h4>{{ equipo.nombre }}</h4>
+          <p>Delegado: {{ equipo.delegado }}</p>
+          <span class="badge-jugadores">{{ equipo.jugadores.length || 0 }} Jugadores</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="equipoSeleccionado" class="equipo-detalle">
+      <button class="btn-volver" (click)="volverAEquipos()">⬅ Volver a Equipos</button>
+      
+      <div class="header-equipo-detalle">
+        <h2>{{ equipoSeleccionado.nombre }}</h2>
+        <div class="botones-header">
+          <button class="btn-editar-equipo" (click)="editarEquipo()">✏️ Editar Info</button>
+          <button class="btn-peligro" (click)="eliminarEquipoCompleto(equipoSeleccionado.id)">🗑️ Borrar Equipo</button>
+        </div>
+      </div>
+      <p class="delegado-text"><strong>Delegado:</strong> {{ equipoSeleccionado.delegado }}</p>
+
+      <div class="acciones-superiores mt-3">
+        <h3>Plantilla ({{ equipoSeleccionado.jugadores.length }} Jugadores)</h3>
+        <button class="btn-anadir" (click)="anadirJugador()">+ Añadir Jugador</button>
+      </div>
+
+      <div class="tabla-responsive">
+        <table class="tabla-jugadores">
+          <thead>
+            <tr>
+              <th>Dorsal</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let jugador of equipoSeleccionado.jugadores">
+              <td><strong>{{ jugador.dorsal }}</strong></td>
+              <td>{{ jugador.nombre }}</td>
+              <td>
+                <span class="badge-sancion" [ngClass]="{'sancionado': jugador.sancionado, 'limpio': !jugador.sancionado}">
+                  {{ jugador.sancionado ? 'SANCIONADO 🟥' : 'LIMPIO 🟩' }}
+                </span>
+              </td>
+              <td class="td-acciones">
+                <button class="btn-icono blue" (click)="editarJugador(jugador)" title="Editar Jugador">✏️</button>
+                <button class="btn-icono orange" (click)="toggleSancionManual(jugador)" title="Cambiar Sanción">⚖️</button>
+                <button class="btn-icono red" (click)="eliminarJugador(jugador)" title="Eliminar Jugador">❌</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+  <div class="tab-content" *ngIf="pestanaActiva === 'eliminatorias'">
+    
+    <div class="header-eliminatorias">
+      <h3>🏆 Gestor de Partidos</h3>
+      <p>Crea o edita partidos. Puedes asignar equipos definitivos o dejar los cruces "por decidir".</p>
+    </div>
+
+    <div class="partido-creator-card" [ngClass]="{'modo-edicion': formPartido.id}">
+      <h4 *ngIf="!formPartido.id">✨ Crear Nuevo Partido</h4>
+      <h4 *ngIf="formPartido.id" style="color: #4CAF50;">✏️ Editando Partido...</h4>
+      
+      <div class="selectores">
+        
+        <div class="select-box" style="width: 32%;">
+          <label>Fase del Torneo</label>
+          <select [(ngModel)]="formPartido.fase">
+            <option *ngFor="let fase of fasesDisponibles" [value]="fase">{{ fase }}</option>
+          </select>
+        </div>
+
+        <div class="select-box" style="width: 32%;">
+          <label>Día</label>
+          <select [(ngModel)]="formPartido.diaStr">
+            <option *ngFor="let dia of diasTorneo" [value]="dia.valor">{{ dia.nombre }}</option>
+          </select>
+        </div>
+
+        <div class="select-box" style="width: 32%;">
+          <label>Hora</label>
+          <select [(ngModel)]="formPartido.horaStr">
+            <option *ngFor="let h of horasTorneo" [value]="h">{{ h }}</option>
+          </select>
+        </div>
+
+      
+
+      </div>
+
+      <div class="selectores mt-3">
+        
+        <div class="select-box equipo-config">
+          <label>Equipo Local</label>
+          <div class="toggle-group">
+            <button [class.activo]="formPartido.tipoLocal === 'decidido'" (click)="formPartido.tipoLocal = 'decidido'">Equipo Real</button>
+            <button [class.activo]="formPartido.tipoLocal === 'pendiente'" (click)="formPartido.tipoLocal = 'pendiente'">Por Definir</button>
+          </div>
+          
+          <select *ngIf="formPartido.tipoLocal === 'decidido'" [(ngModel)]="formPartido.localEquipo">
+            <option [ngValue]="null">Selecciona equipo...</option>
+            <option *ngFor="let eq of getEquiposFiltrados('local')" [ngValue]="eq">{{ eq.nombre }}</option>
+          </select>
+          
+          <select *ngIf="formPartido.tipoLocal === 'pendiente'" [(ngModel)]="formPartido.localPendiente">
+            <option *ngFor="let op of opcionesPendientes" [value]="op">{{ op }}</option>
+          </select>
+        </div>
+
+        <span class="vs-badge mt-4">VS</span>
+
+        <div class="select-box equipo-config">
+          <label>Equipo Visitante</label>
+          <div class="toggle-group">
+            <button [class.activo]="formPartido.tipoVisitante === 'decidido'" (click)="formPartido.tipoVisitante = 'decidido'">Equipo Real</button>
+            <button [class.activo]="formPartido.tipoVisitante === 'pendiente'" (click)="formPartido.tipoVisitante = 'pendiente'">Por Definir</button>
+          </div>
+          
+          <select *ngIf="formPartido.tipoVisitante === 'decidido'" [(ngModel)]="formPartido.visitanteEquipo">
+            <option [ngValue]="null">Selecciona equipo...</option>
+            <option *ngFor="let eq of getEquiposFiltrados('visitante')" [ngValue]="eq">{{ eq.nombre }}</option>
+          </select>
+          
+          <select *ngIf="formPartido.tipoVisitante === 'pendiente'" [(ngModel)]="formPartido.visitantePendiente">
+            <option *ngFor="let op of opcionesPendientes" [value]="op">{{ op }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem;" class="mt-4">
+        <button class="btn-gigante" [ngClass]="formPartido.id ? 'verde' : 'oscuro'" (click)="guardarPartido()">
+          {{ formPartido.id ? '💾 GUARDAR CAMBIOS' : '✨ CREAR PARTIDO' }}
+        </button>
+        <button *ngIf="formPartido.id" class="btn-gigante red" style="background: #c62828;" (click)="cancelarEdicion()">
+          ❌ CANCELAR
+        </button>
+      </div>
+
+    </div>
+
+    <div class="header-eliminatorias mt-4">
+      <h3>📋 Calendario del Torneo</h3>
+    </div>
+
+    <div class="partidos-list" *ngIf="partidos$ | async as partidos">
+      <div class="partido-row" *ngFor="let p of partidos" [ngClass]="{'en-edicion': p.id === formPartido.id}">
+        <div style="display: flex; flex-direction: column;">
+          <strong style="color: #fce373;">{{ p.fase }}</strong>
+          <span>{{ p.equipoLocal?.nombre }} <b>VS</b> {{ p.equipoVisitante?.nombre }}</span>
+          <span style="font-size: 0.8rem; color: #aaa;">🕒 {{ p.horaInicio | date:'dd/MM HH:mm' }}</span>
+        </div>
+        
+        <div class="acciones">
+          <button class="btn-icono blue" (click)="abrirEditorPartido(p)" title="Editar Equipos o Fecha">✏️</button>
+          <button class="btn-icono red" (click)="eliminarPartido(p.id)" title="Eliminar Partido">❌</button>
+        </div>
+      </div>
+      <div *ngIf="partidos.length === 0" style="text-align: center; color: #aaa;">No hay ningún partido creado.</div>
+    </div>
+
+  </div>
+  
+
+    <!-- ========================================== -->
+    <!-- CRÉDITOS DEL DESARROLLADOR                 -->
+    <!-- ========================================== -->
+    <div class="creditos-desarrollador">
+      <p>Desarrollado  por <strong class="mi-nombre">Alex Saez</strong></p>
+      
+      <div class="enlaces-portfolio">
+        <a href="https://saezalex.github.io/portfolio/" target="_blank">Portfolio</a>
+        <span class="separador-enlaces">|</span>
+        <a href="https://www.instagram.com/alexxsaaezz/" target="_blank">Instagram</a>
+      </div>
+      
+      <small>Software de Gestión Deportiva © 2026</small>
+    </div>
+
+</div>

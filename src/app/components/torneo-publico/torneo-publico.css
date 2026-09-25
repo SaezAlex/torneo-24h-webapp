@@ -1,0 +1,587 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,700;0,900;1,900&display=swap');
+
+/* --- FONDO GLOBAL --- */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-image: 
+    linear-gradient(rgba(11, 74, 37, 0.90), rgba(0, 0, 0, 0.95)), 
+    url('/assets/patxi.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.public-container {
+  padding: 2rem 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CABECERA --- */
+.header-torneo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.header-torneo h2 {
+  font-size: 3rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+  background: linear-gradient(to bottom, #fff1a0 0%, #d4af37 50%, #b38b14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+}
+
+.header-torneo p {
+  font-family: 'Dancing Script', cursive;
+  color: #fce373;
+  font-size: 1.8rem;
+  margin-top: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* --- NAVEGACIÓN DE DÍAS (SCROLL HORIZONTAL) --- */
+.fases-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  scrollbar-width: none;
+}
+.fases-scroll::-webkit-scrollbar { display: none; }
+
+.fases-scroll button {
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.fases-scroll button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.fases-scroll button.activo {
+  background: linear-gradient(to right, #d4af37, #b38b14);
+  color: #000;
+  border-color: #fce373;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* --- TARJETAS DE PARTIDO --- */
+.partidos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.partido-card {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  transition: transform 0.2s;
+}
+
+.partido-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* --- BADGES DE INFORMACIÓN --- */
+.fase-badge {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fce373;
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.hora-badge {
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+}
+
+/* --- ESTADO DEL PARTIDO --- */
+.estado-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #888;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.texto-directo {
+  color: #4CAF50;
+}
+
+.pulsating-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  animation: pulso 1.5s infinite;
+}
+
+@keyframes pulso {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+}
+
+/* --- MARCADOR Y EQUIPOS --- */
+.equipos-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.equipo {
+  flex: 1;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.marcador-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 1rem;
+  min-width: 120px;
+}
+
+.marcador-box.en-juego {
+  border-color: #4CAF50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+}
+
+.marcador-box.en-juego .goles {
+  color: #4CAF50;
+}
+
+.goles {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+
+.separador {
+  color: #555;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* --- TARJETA DESTACADA --- */
+.partido-card.destacado {
+  border: 2px solid #d4af37;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(0, 0, 0, 0.7) 100%);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.2);
+}
+
+.etiqueta-destacado {
+  width: calc(100% + 3rem);
+  text-align: center;
+  font-weight: 900;
+  padding: 0.5rem;
+  margin: -1.5rem -1.5rem 1rem -1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.etiqueta-destacado.directo {
+  background-color: #d4af37;
+  color: #000;
+}
+
+.etiqueta-destacado.proximo {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fce373;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.no-partidos {
+  text-align: center;
+  font-style: italic;
+  color: #aaa;
+  margin-top: 2rem;
+  font-weight: bold;
+}
+
+/* --- PESTAÑAS PRINCIPALES (PARTIDOS / REPESCA) --- */
+.main-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.main-tabs button {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+  backdrop-filter: blur(5px);
+}
+
+.main-tabs button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.main-tabs button.activa {
+  background: linear-gradient(135deg, #d4af37 0%, #b38b14 100%);
+  color: #000;
+  border-color: #fce373;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* --- TABLA DE REPESCA --- */
+.repesca-container {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.info-repesca {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #d4af37;
+}
+
+.info-repesca p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  color: #fff;
+}
+
+.info-repesca small {
+  color: #ccc;
+  font-style: italic;
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+}
+
+.tabla-clasificacion {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  color: #fff;
+}
+
+.tabla-clasificacion th {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  font-weight: 900;
+  color: #fce373;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.tabla-clasificacion td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+}
+
+.tabla-clasificacion tr:last-child td {
+  border-bottom: none;
+}
+
+.td-equipo {
+  text-align: left;
+  font-weight: 800 !important;
+  font-size: 1.1rem;
+}
+
+.goles-destacado {
+  color: #ff6b6b; /* Resaltar goles en contra */
+  font-weight: 900 !important;
+  font-size: 1.2rem;
+}
+
+.positivo { color: #4CAF50; }
+.negativo { color: #ff6b6b; }
+
+/* Filas de los 5 clasificados */
+.clasificado {
+  background: linear-gradient(90deg, rgba(76, 175, 80, 0.15) 0%, transparent 100%);
+  border-left: 4px solid #4CAF50;
+}
+
+.posicion {
+  font-weight: 900;
+  color: #888;
+}
+
+.clasificado .posicion {
+  color: #4CAF50;
+}
+
+.icono-check {
+  font-size: 1.2rem;
+}
+
+.sin-datos {
+  padding: 2rem !important;
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Fila del eliminado (Posición 11) */
+.eliminado {
+  background: linear-gradient(90deg, rgba(255, 107, 107, 0.15) 0%, transparent 100%);
+  border-left: 4px solid #ff6b6b;
+  opacity: 0.85;
+}
+
+.eliminado .posicion {
+  color: #ff6b6b;
+  font-size: 1.1rem;
+}
+
+/* --- CRÉDITOS DEL DESARROLLADOR --- */
+.creditos-desarrollador {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  animation: fadeIn 1s ease;
+}
+
+.creditos-desarrollador p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mi-nombre {
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Contenedor de los dos enlaces */
+.enlaces-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.creditos-desarrollador a {
+  color: #d4af37; /* Tu dorado */
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.creditos-desarrollador a:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+  transform: translateY(-2px);
+}
+
+.separador-enlaces {
+  color: #555;
+  font-weight: 300;
+}
+
+.creditos-desarrollador small {
+  display: block;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+/* --- ESTILOS PARA EL GANADOR Y PENALTIS --- */
+.partido-finalizado .equipo.ganador .nombre {
+  color: #d4af37; /* Dorado para el ganador */
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.partido-finalizado .equipo:not(.ganador) .nombre {
+  color: #777; /* Color apagado para el perdedor */
+  font-weight: 600;
+}
+
+.goles-ganador {
+  color: #d4af37 !important; /* Goles en dorado */
+}
+
+.corona {
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.badge-penaltis {
+  width: 100%;
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.05) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #fce373;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  animation: fadeIn 0.5s ease;
+  margin-top: 1rem;
+}
+
+
+/* ======================================================= */
+/* 📱 ADAPTACIÓN PARA MÓVILES (RESPONSIVE) - PORTAL PÚBLICO*/
+/* ======================================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Ajustar márgenes generales y contenedor */
+  .public-container {
+    padding: 1.5rem 0.8rem;
+  }
+
+  /* 2. Reducir tamaño de la cabecera */
+  .header-torneo h2 { 
+    font-size: 2.2rem; 
+  }
+  .header-torneo p { 
+    font-size: 1.2rem; 
+  }
+
+  /* 3. Pestañas Principales (Partidos / Repesca) */
+  .main-tabs { 
+    gap: 0.5rem; 
+    flex-wrap: wrap; 
+  }
+  .main-tabs button { 
+    padding: 0.8rem 1rem; 
+    font-size: 0.95rem; 
+    flex: 1; /* Hace que ocupen el mismo ancho */
+  }
+
+  /* 4. Scroll de Fases (Octavos, Cuartos...) */
+  .fases-scroll button { 
+    padding: 0.6rem 1.2rem; 
+    font-size: 0.85rem; 
+  }
+
+  /* 5. Tarjetas de los Partidos y Marcador (Crucial para móvil) */
+  .partido-card { 
+    padding: 1rem; 
+  }
+  .equipo { 
+    font-size: 0.95rem; /* Letra más pequeña para que quepan nombres largos */
+  }
+  .marcador-box { 
+    padding: 0.5rem 0.8rem; 
+    margin: 0 0.5rem; 
+    min-width: 90px; 
+  }
+  .goles { 
+    font-size: 1.8rem; /* Reducimos el tamaño de los goles */
+  }
+  .separador { 
+    font-size: 1.2rem; 
+  }
+  
+  /* Ajuste de las cintas de "PARTIDO EN DIRECTO" para el nuevo padding */
+  .etiqueta-destacado { 
+    width: calc(100% + 2rem); 
+    margin: -1rem -1rem 1rem -1rem; 
+    font-size: 0.75rem; 
+  }
+
+  .estado-bar { 
+    font-size: 0.75rem; 
+  }
+
+  /* 6. Tabla de Repesca */
+  .info-repesca p { 
+    font-size: 0.9rem; 
+  }
+  /* Obligamos a la tabla a no encogerse más de 450px. 
+     Así activará tu genial overflow-x (scroll horizontal) en vez de aplastarse */
+  .tabla-clasificacion {
+    min-width: 450px; 
+  }
+  .tabla-clasificacion th, .tabla-clasificacion td { 
+    padding: 0.8rem 0.5rem; 
+    font-size: 0.85rem; 
+  }
+  .td-equipo { 
+    font-size: 0.9rem; 
+  }
+  .goles-destacado {
+    font-size: 1rem;
+  }
+  .icono-check, .eliminado .posicion {
+    font-size: 1rem;
+  }
+}

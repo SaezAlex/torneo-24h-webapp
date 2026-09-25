@@ -1,0 +1,167 @@
+
+/* Importamos las fuentes para el logo */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,900;1,900&display=swap');
+
+/* Contenedor principal de la barra de navegación */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  /* Verde oscuro inspirado en el fondo de la bandera del logo */
+  background-color: #0b4a25; 
+  /* Borde inferior dorado para enmarcar el navbar */
+  border-bottom: 4px solid #d4af37; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
+/* --- ESTILOS DEL CONTENEDOR LOGO + TEXTO --- */
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Espacio entre la imagen y el texto */
+  text-decoration: none;
+}
+
+/* Evitamos que el texto haga cosas raras al pasar el ratón */
+.logo-link:hover .logo-img {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+.logo-titulo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1; /* Mantiene los textos pegados verticalmente */
+}
+
+.linea-superior {
+  display: flex;
+  align-items: baseline; /* Alinea el "24" y "Horas" por la base */
+  gap: 0.3rem;
+}
+
+/* Contenedor del Logo */
+.logo a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 65px;
+  width: 65px;
+  border-radius: 50%; /* Hace que el logo se vea perfectamente circular */
+  border: 2px solid #d4af37; /* Anillo dorado alrededor del logo */
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: white; /* Por si la imagen tarda en cargar */
+}
+
+/* Efecto al pasar el ratón por el logo */
+.logo-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+/* --- ESTILOS DEL "24" (Dorado, brillante y grueso) --- */
+.destacado-24 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  font-style: italic;
+  /* Degradado dorado inspirado en el logo */
+  background: linear-gradient(to bottom, #fff1a0 0%, #d4af37 50%, #b38b14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Usamos drop-shadow porque text-shadow no funciona bien con gradientes de texto */
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+  letter-spacing: -2px; /* Junta un poco el 2 y el 4 */
+}
+
+/* --- ESTILOS DE "Horas" --- */
+.texto-horas {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  font-style: italic;
+  color: #fce373;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.8);
+  text-transform: uppercase;
+}
+
+/* --- ESTILOS DE "Castro Urdiales" (Cursiva elegante) --- */
+.texto-castro {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8rem;
+  color: #fce373;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+  margin-top: -0.4rem; /* Sube el texto para que quede encajado bajo el 24 */
+}
+
+/* Enlaces de navegación */
+.enlaces {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.enlaces a {
+  color: #ffffff; /* Texto en blanco para resaltar sobre el verde */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Estado hover y pestaña activa (Dorado del texto del logo) */
+.enlaces a:hover, 
+.enlaces a.activo {
+  color: #fce373; 
+  transform: translateY(-2px);
+}
+
+/* Botones de acción principal (Azul de la pista de fútbol sala) */
+.btn-login, 
+.btn-logout {
+  background-color: #1a6bcf; 
+  color: white !important;
+  border: 2px solid transparent;
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Efecto hover de los botones */
+.btn-login:hover, 
+.btn-logout:hover {
+  background-color: #124d96;
+  border-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Adaptabilidad para móviles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .enlaces {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+

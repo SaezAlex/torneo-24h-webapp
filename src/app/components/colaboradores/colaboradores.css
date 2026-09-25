@@ -1,0 +1,199 @@
+/* Importamos las mismas fuentes que en el Navbar */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,900;1,900&display=swap');
+
+.colaboradores-container {
+  padding: 3rem 1.5rem;
+  color: #fff;
+  text-align: center;
+  
+  /* --- MAGIA DEL FONDO --- */
+  /* Mezclamos un degradado verde oscuro/negro translúcido con la foto del polideportivo */
+  background-image: 
+    linear-gradient(rgba(11, 74, 37, 0.85), rgba(0, 0, 0, 0.95)), 
+    url('/assets/patxi.jpg'); /* ⚠️ Cambia el nombre al archivo real de tu foto */
+  
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Crea un efecto Parallax muy limpio al hacer scroll */
+  
+  /* Asegura que el componente ocupe al menos toda la pantalla */
+  min-height: 100vh; 
+}
+
+/* --- Títulos Principales --- */
+.header-seccion h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  /* Degradado dorado inspirado en el logo */
+  background: linear-gradient(to bottom, #fff1a0 0%, #d4af37 50%, #b38b14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+}
+
+.header-seccion p {
+  font-family: 'Dancing Script', cursive;
+  color: #fce373; /* Amarillo claro del logo */
+  font-size: 1.5rem;
+  max-width: 650px;
+  margin: 0 auto 3rem auto;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* --- Separadores de Categoría (Organiza / Colaboran) --- */
+.tier-title {
+  font-family: 'Montserrat', sans-serif;
+  color: #ffffff;
+  border-bottom: 3px solid #d4af37; /* Subrayado dorado */
+  padding-bottom: 0.5rem;
+  margin: 2rem auto 1.5rem auto;
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+}
+
+/* --- Rejilla de Logos --- */
+.logos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* --- Tarjetas de Logos --- */
+.logo-card {
+  background: transparent;
+  border: 1px solid transparent; /* Preparado para el hover */
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.logo-card:hover {
+  transform: translateY(-5px) scale(1.05); 
+  background: rgba(255, 255, 255, 0.03); /* Brillo muy sutil de fondo */
+  border-color: rgba(212, 175, 55, 0.3); /* Borde dorado translúcido */
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15); /* Sombra dorada */
+}
+
+.logo-card img {
+  max-width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  /* Damos un poco de volumen a las imágenes (útil si son PNG sin fondo) */
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); 
+  transition: filter 0.3s ease;
+}
+
+.logo-card:hover img {
+  /* El drop-shadow se vuelve dorado al hacer hover */
+  filter: drop-shadow(0 6px 12px rgba(212, 175, 55, 0.4));
+}
+
+/* Estilo para cuando falla la imagen y se muestra el texto */
+.logo-card span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fce373;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+/* --- Tarjetas más pequeñas para los colaboradores --- */
+.logos-grid.pequeños .logo-card {
+  width: 180px;
+  padding: 1rem;
+}
+
+.logos-grid.pequeños .logo-card img {
+  max-height: 80px;
+}
+
+.mt-4 { margin-top: 3.5rem; }
+
+/* --- Adaptabilidad Móvil --- */
+@media (max-width: 768px) {
+  .header-seccion h2 {
+    font-size: 2rem;
+  }
+  .header-seccion p {
+    font-size: 1.3rem;
+  }
+  .logos-grid {
+    gap: 1rem;
+  }
+  .logos-grid.pequeños .logo-card {
+    width: 140px;
+  }
+}
+
+/* --- CRÉDITOS DEL DESARROLLADOR --- */
+.creditos-desarrollador {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  animation: fadeIn 1s ease;
+}
+
+.creditos-desarrollador p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mi-nombre {
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Contenedor de los dos enlaces */
+.enlaces-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.creditos-desarrollador a {
+  color: #d4af37; /* Tu dorado */
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.creditos-desarrollador a:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+  transform: translateY(-2px);
+}
+
+.separador-enlaces {
+  color: #555;
+  font-weight: 300;
+}
+
+.creditos-desarrollador small {
+  display: block;
+  font-size: 0.75rem;
+  color: #555;
+}

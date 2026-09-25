@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,700;0,900;1,900&display=swap');
+
+.info-noticias-container {
+  padding: 2rem 1rem;
+  color: #fff;
+  
+  /* --- FONDO DEL PATXI TORRE --- */
+  background-image: 
+    linear-gradient(rgba(11, 74, 37, 0.90), rgba(0, 0, 0, 0.95)), 
+    url('/assets/patxi.jpg'); /* Ajusta la ruta si es necesario */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* --- MENÚ DE PESTAÑAS --- */
+.submenu-scroll {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  overflow-x: auto;
+  justify-content: center;
+  padding-bottom: 0.5rem; /* Para que la sombra no se corte al hacer scroll */
+}
+
+.submenu-scroll button {
+  font-family: 'Montserrat', sans-serif;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.submenu-scroll button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* Pestaña activa (Dorado brillante) */
+.submenu-scroll button.activo {
+  background: linear-gradient(to right, #d4af37, #b38b14);
+  color: #000;
+  border-color: #fce373;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* --- SECCIÓN NOTICIAS --- */
+.noticias-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.noticia-card {
+  /* Cristal oscuro */
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.noticia-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.noticia-card.destacada {
+  border-left: 5px solid #d4af37; /* Borde izquierdo dorado */
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.noticia-card .fecha {
+  font-family: 'Montserrat', sans-serif;
+  color: #fce373; /* Amarillo claro */
+  font-size: 0.85rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.noticia-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0.5rem 0 1rem 0;
+  color: #ffffff;
+}
+
+.noticia-card p {
+  color: #d1d5db;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  color: #aaa;
+  padding: 3rem;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+}
+
+/* --- SECCIÓN REGLAMENTO --- */
+.reglamento-seccion h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2rem;
+  /* Texto dorado */
+  background: linear-gradient(to bottom, #fff1a0 0%, #d4af37 50%, #b38b14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+}
+
+.pdf-card {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.3); /* Borde sutil dorado */
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.icono-documento {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+.pdf-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.pdf-card p {
+  color: #ccc;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+/* Botón descargar PDF - Azul de la pista para destacar sobre los dorados y verdes */
+.btn-pdf {
+  display: inline-block;
+  background-color: #1a6bcf;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  padding: 1rem 2rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(26, 107, 207, 0.4);
+}
+
+.btn-pdf:hover {
+  background-color: #124d96;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(26, 107, 207, 0.6);
+  color: #fff;
+}
+
+
+/* --- CRÉDITOS DEL DESARROLLADOR --- */
+.creditos-desarrollador {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  animation: fadeIn 1s ease;
+}
+
+.creditos-desarrollador p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mi-nombre {
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Contenedor de los dos enlaces */
+.enlaces-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.creditos-desarrollador a {
+  color: #d4af37; /* Tu dorado */
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.creditos-desarrollador a:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+  transform: translateY(-2px);
+}
+
+.separador-enlaces {
+  color: #555;
+  font-weight: 300;
+}
+
+.creditos-desarrollador small {
+  display: block;
+  font-size: 0.75rem;
+  color: #555;
+}

@@ -1,0 +1,402 @@
+/* Importamos las fuentes oficiales del torneo */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:ital,wght@0,700;0,900;1,900&display=swap');
+
+/* --- FONDO GLOBAL DEL PANEL --- */
+/* Quitamos la restricción de width en el host para que el fondo ocupe toda la pantalla */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-image: 
+    linear-gradient(rgba(11, 74, 37, 0.90), rgba(0, 0, 0, 0.95)), 
+    url('/assets/patxi.jpg'); /* Asegúrate de que la ruta coincida */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.admin-container { 
+  padding: 3rem 2rem; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* --- CABECERA --- */
+.header-admin { text-align: center; margin-bottom: 3rem; }
+.header-admin h2 { 
+  font-size: 3rem; 
+  margin-bottom: 0.5rem; 
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  /* Degradado Dorado */
+  background: linear-gradient(to bottom, #fff1a0 0%, #d4af37 50%, #b38b14 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
+}
+
+.header-admin p {
+  font-family: 'Dancing Script', cursive;
+  color: #fce373;
+  font-size: 1.8rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* --- MENÚ PESTAÑAS --- */
+.tabs-menu { 
+  display: flex; 
+  gap: 1rem; 
+  margin-bottom: 2rem; 
+  padding-bottom: 1rem; 
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.tabs-menu button { 
+  font-family: 'Montserrat', sans-serif;
+  background: rgba(255, 255, 255, 0.05); 
+  color: #ccc; 
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  padding: 0.8rem 1.5rem; 
+  font-size: 1rem; 
+  border-radius: 30px; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  font-weight: 700; 
+  text-transform: uppercase;
+  backdrop-filter: blur(5px);
+}
+.tabs-menu button:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.tabs-menu button.activa { 
+  background: linear-gradient(to right, #d4af37, #b38b14); 
+  color: #000; 
+  border-color: #fce373;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* --- CONTENEDORES PRINCIPALES (Glassmorphism) --- */
+.tab-content, .equipo-detalle { 
+  background: rgba(0, 0, 0, 0.6); 
+  padding: 2.5rem; 
+  border-radius: 16px; 
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- TIPOGRAFÍA INTERNA --- */
+h3, h4 { color: #fce373; font-weight: 800; margin-top: 0; }
+.header-eliminatorias { border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 2rem; padding-bottom: 1rem; }
+.header-eliminatorias p { color: #ccc; }
+
+/* --- INPUTS, TEXTAREAS Y SELECTS OSCUROS --- */
+input[type="text"], input[type="datetime-local"], textarea, select, .file-input {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.8rem;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+}
+input[type="text"]:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  background: rgba(0, 0, 0, 0.7);
+}
+/* Las opciones del select en navegadores no admiten mucha transparencia */
+select option { background: #1a1a1a; color: #fff; font-weight: bold; }
+
+/* --- BOTONES DE ACCIÓN --- */
+.btn-anadir, .btn-volver, .btn-editar-equipo, .btn-peligro { 
+  border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 800; text-transform: uppercase; font-family: 'Montserrat', sans-serif; transition: all 0.2s; 
+}
+.btn-anadir { background: #1a6bcf; color: white; }
+.btn-anadir:hover { background: #124d96; transform: translateY(-2px); }
+.btn-volver { background: transparent; color: #ccc; border: 1px solid #ccc; margin-bottom: 1.5rem; }
+.btn-volver:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.btn-editar-equipo { background: #d4af37; color: #000; }
+.btn-editar-equipo:hover { background: #b38b14; }
+.btn-peligro { background: #c62828; color: white; }
+.btn-peligro:hover { background: #b71c1c; }
+
+/* --- BOTONES GIGANTES --- */
+.btn-gigante { width: 100%; padding: 1.2rem; font-size: 1.2rem; font-weight: 900; color: white; border: none; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: transform 0.2s, box-shadow 0.2s; font-family: 'Montserrat', sans-serif; }
+.btn-gigante:hover { transform: translateY(-3px); }
+.btn-gigante.verde { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4); }
+.btn-gigante.naranja { background: linear-gradient(135deg, #e65100 0%, #bf360c 100%); box-shadow: 0 4px 15px rgba(230, 81, 0, 0.4); }
+.btn-gigante.oscuro { background: linear-gradient(135deg, #d4af37 0%, #b38b14 100%); color: #000; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); }
+
+/* --- GRID DE EQUIPOS --- */
+.acciones-superiores { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.equipos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+.equipo-card { 
+  background: rgba(0, 0, 0, 0.4); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  padding: 1.5rem; 
+  border-radius: 12px; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+  text-align: center; 
+}
+.equipo-card:hover { transform: translateY(-5px); border-color: #d4af37; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); background: rgba(212, 175, 55, 0.05); }
+.badge-jugadores { display: inline-block; margin-top: 1rem; background: #1a6bcf; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
+
+/* --- TABLAS (Adaptadas a oscuro) --- */
+.tabla-jugadores { width: 100%; border-collapse: collapse; margin-top: 1rem; color: #fff; }
+.tabla-jugadores th, .tabla-jugadores td { padding: 1.2rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.tabla-jugadores th { background: rgba(255, 255, 255, 0.05); font-weight: 800; color: #d4af37; text-transform: uppercase; }
+.tabla-jugadores tbody tr:hover { background: rgba(255, 255, 255, 0.02); }
+
+/* --- ESTADOS (Badges) --- */
+.badge-sancion { padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold; font-size: 0.85rem; }
+.sancionado { background: rgba(198, 40, 40, 0.2); border: 1px solid #c62828; color: #ff8a80; }
+.limpio { background: rgba(46, 125, 50, 0.2); border: 1px solid #2e7d32; color: #a5d6a7; }
+
+/* --- ICONOS DE ACCIÓN --- */
+.td-acciones, .acciones { display: flex; gap: 0.8rem; align-items: center; }
+.btn-icono { border: none; background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 6px; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; }
+.btn-icono:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
+
+/* --- LISTADO DE NOTICIAS Y PARTIDOS --- */
+.partido-row { 
+  display: flex; justify-content: space-between; padding: 1.2rem; 
+  border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); align-items: center; border-radius: 8px; margin-bottom: 0.5rem;
+}
+.partido-row:hover { background: rgba(0,0,0,0.5); border-color: rgba(212, 175, 55, 0.3); }
+
+/* --- CREADOR DE ELIMINATORIAS --- */
+.partidos-creator-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+.partido-creator-card { 
+  background: rgba(0, 0, 0, 0.4); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  padding: 1.5rem; border-radius: 12px; 
+}
+.partido-creator-card h4 { color: #fff; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.8rem; margin-bottom: 1.2rem; }
+.selectores { display: flex; justify-content: space-between; align-items: center; }
+.select-box { display: flex; flex-direction: column; width: 42%; }
+.select-box label { font-size: 0.85rem; font-weight: bold; color: #aaa; margin-bottom: 0.5rem; text-transform: uppercase; }
+.vs-badge { background: #d4af37; color: #000; padding: 0.3rem 0.6rem; border-radius: 20px; font-weight: 900; font-size: 0.9rem; font-style: italic; }
+
+
+.fase-select select { border-color: #d4af37; color: #fce373; font-weight: bold; }
+
+/* Utilidades */
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 2rem; }
+.mt-4 { margin-top: 3rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+.w-100 { width: 100%; box-sizing: border-box; }
+.upload-box { border: 2px dashed rgba(255,255,255,0.3); padding: 3rem; text-align: center; border-radius: 8px; margin-top: 1rem; background: rgba(0,0,0,0.2); }
+
+/* --- NUEVO CREADOR / EDITOR DE PARTIDOS --- */
+.partido-creator-card { 
+  background: rgba(0, 0, 0, 0.4); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  padding: 1.5rem; 
+  border-radius: 12px; 
+  max-width: 800px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.partido-creator-card h4 { 
+  color: #fff; 
+  text-align: center; 
+  border-bottom: 1px solid rgba(255,255,255,0.1); 
+  padding-bottom: 0.8rem; 
+  margin-bottom: 1.2rem; 
+}
+
+.modo-edicion {
+  border: 2px solid #4CAF50;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.2);
+  background: rgba(76, 175, 80, 0.05);
+}
+
+.en-edicion {
+  border: 1px dashed #4CAF50 !important;
+  background: rgba(76, 175, 80, 0.1) !important;
+}
+
+/* --- TOGGLES DE DECIDIDO / POR DECIDIR --- */
+.equipo-config {
+  width: 42%;
+}
+
+.toggle-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.toggle-group button {
+  flex: 1;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.toggle-group button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-group button.activo {
+  background: #d4af37;
+  color: #000;
+  border-color: #fce373;
+}
+
+/* --- q no veo el calendario --- */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* --- CRÉDITOS DEL DESARROLLADOR --- */
+.creditos-desarrollador {
+  text-align: center;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  animation: fadeIn 1s ease;
+}
+
+.creditos-desarrollador p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.mi-nombre {
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Contenedor de los dos enlaces */
+.enlaces-portfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.creditos-desarrollador a {
+  color: #d4af37; /* Tu dorado */
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.creditos-desarrollador a:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+  transform: translateY(-2px);
+}
+
+.separador-enlaces {
+  color: #555;
+  font-weight: 300;
+}
+
+.creditos-desarrollador small {
+  display: block;
+  font-size: 0.75rem;
+  color: #555;
+}
+
+
+/* ======================================================= */
+/* 📱 ADAPTACIÓN PARA MÓVILES (RESPONSIVE)                 */
+/* ======================================================= */
+@media (max-width: 768px) {
+  
+  /* 1. Reducir márgenes y tamaños de fuente gigantes */
+  .admin-container { 
+    padding: 1.5rem 1rem; 
+  }
+  .header-admin h2 { 
+    font-size: 2rem; 
+  }
+  .header-admin p { 
+    font-size: 1.2rem; 
+  }
+  .tab-content, .equipo-detalle, .partido-creator-card { 
+    padding: 1.2rem; 
+  }
+
+  /* 2. Creador de partidos (Pasar de Fila a Columna) */
+  .selectores { 
+    flex-direction: column; 
+    gap: 1.5rem; 
+  }
+  .select-box { 
+    width: 100% !important; /* Forzamos que ocupe todo el ancho */
+  }
+  .vs-badge { 
+    margin: 10px 0; 
+  }
+  
+  /* 3. Acciones superiores y botones apilados */
+  .acciones-superiores { 
+    flex-direction: column; 
+    gap: 1rem; 
+    align-items: flex-start; 
+  }
+  .header-equipo-detalle { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1rem; 
+    align-items: flex-start; 
+  }
+  .botones-header { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 0.5rem; 
+  }
+
+  /* 4. Magia para la tabla: Scroll horizontal aislado */
+  .tabla-responsive { 
+    width: 100%; 
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
+    margin-bottom: 1rem;
+  }
+  .tabla-jugadores { 
+    min-width: 600px; /* Obliga a la tabla a mantener un tamaño legible, activando el scroll del div padre */
+  }
+
+  /* 5. Listado de Partidos y Noticias (Botones abajo) */
+  .partido-row { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 1rem; 
+  }
+  .partido-row .acciones { 
+    width: 100%; 
+    justify-content: flex-end; 
+    margin-top: 0.5rem; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    padding-top: 0.8rem; 
+  }
+}
